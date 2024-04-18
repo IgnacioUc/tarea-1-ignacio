@@ -12,7 +12,7 @@ void presioneTeclaParaContinuar() {
   getchar(); // Consume el '\n' del buffer de entrada
   getchar(); // Espera a que el usuario presione una tecla
 }
-
+//hola profe
 // Estructura para representar a un paciente
 typedef struct {
     char nombre[50];
