@@ -103,6 +103,31 @@ void mostrar_lista_pacientes(List *pacientes) {
     free(array_pacientes);
 }
 
+// Función para mostrar pacientes por prioridad
+void mostrar_pacientes_por_prioridad(List *pacientes, char *prioridad) {
+    printf("Pacientes con prioridad '%s':\n", prioridad);
+
+    // Bandera para verificar si se encontraron pacientes con la prioridad dada
+    int pacientes_encontrados = 0;
+
+    // Iterar sobre la lista de pacientes y mostrar los que tienen la prioridad dada
+    list_first(pacientes);
+    while (list_next(pacientes) != NULL) {
+        Paciente *paciente_actual = (Paciente *)list_next(pacientes);
+        if (strcmp(paciente_actual->prioridad, prioridad) == 0) {
+            printf("Nombre: %s, Edad: %d, Síntoma: %s, Hora de registro: %s",
+                   paciente_actual->nombre, paciente_actual->edad,
+                   paciente_actual->sintoma, ctime(&paciente_actual->hora_registro));
+            pacientes_encontrados = 1;
+        }
+    }
+
+    // Verificar si no se encontraron pacientes con la prioridad dada
+    if (!pacientes_encontrados) {
+        printf("No hay pacientes con prioridad '%s'.\n", prioridad);
+    }
+}
+
 // Función para registrar un nuevo paciente
 void registrar_paciente(List *pacientes) {
     // Crear un nuevo paciente
@@ -181,8 +206,13 @@ int main() {
       // Lógica para atender al siguiente paciente
       break;
     case '5':
-      // Lógica para mostrar pacientes por prioridad
-      break;
+    {
+        char prioridad[10];
+        printf("Ingrese el nivel de prioridad ('Alto', 'Medio', 'Bajo'): ");
+        scanf("%s", prioridad);
+        mostrar_pacientes_por_prioridad(pacientes, prioridad);
+    }
+    break;
     case '6':
       puts("Saliendo del sistema de gestión hospitalaria...");
       break;
