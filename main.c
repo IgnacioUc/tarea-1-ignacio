@@ -60,9 +60,11 @@ void mostrar_lista_pacientes(List *pacientes) {
     int num_pacientes = 0;
 
     // Iterar sobre la lista de pacientes y contar el número de elementos
-    list_first(pacientes);
-    while (list_next(pacientes) != NULL) {
+    if (list_first(pacientes) != NULL) {
         num_pacientes++;
+        while (list_next(pacientes) != NULL) {
+            num_pacientes++;
+        }
     }
 
     // Verificar si la lista está vacía
@@ -79,15 +81,12 @@ void mostrar_lista_pacientes(List *pacientes) {
     }
 
     // Volver al inicio de la lista
-    list_first(pacientes);
-
-    // Llenar el array con los punteros a los pacientes
     int i = 0;
-    while (list_next(pacientes) != NULL) {
-        Paciente *paciente_actual = (Paciente *)list_next(pacientes);
+    Paciente *paciente_actual = (Paciente *)list_first(pacientes);
+    array_pacientes[i++] = paciente_actual;
+    while ((paciente_actual = (Paciente *)list_next(pacientes)) != NULL) {
         array_pacientes[i++] = paciente_actual;
     }
-
     // Ordenar el array de pacientes usando la función de comparación
     qsort(array_pacientes, num_pacientes, sizeof(Paciente *), comparar_pacientes);
 
@@ -153,6 +152,7 @@ void registrar_paciente(List *pacientes) {
     printf("Paciente registrado con éxito.\n");
 }
 
+
 // Función para asignar prioridad a un paciente
 void asignar_prioridad(List *pacientes) {
     char nombre[100];
@@ -162,15 +162,14 @@ void asignar_prioridad(List *pacientes) {
     printf("Ingrese el nombre del paciente: ");
     scanf("%s", nombre);
 
-    // Solicitar al usuario que ingrese el nuevo nivel de prioridad
-    printf("Ingrese el nuevo nivel de prioridad ('Alto', 'Medio', 'Bajo'): ");
-    scanf("%s", nueva_prioridad);
-
-    // Recorrer la lista de pacientes para buscar al paciente por nombre
+    // Buscar al paciente por nombre y asignar prioridad si se encuentra
     list_first(pacientes);
     while (list_next(pacientes) != NULL) {
-        Paciente *paciente_actual = (Paciente *)list_next(pacientes);
+        Paciente *paciente_actual = (Paciente *)list_first(pacientes);
         if (strcmp(paciente_actual->nombre, nombre) == 0) {
+            // Solicitar al usuario que ingrese el nuevo nivel de prioridad
+            printf("Ingrese el nuevo nivel de prioridad ('Alto', 'Medio', 'Bajo'): ");
+            scanf("%s", nueva_prioridad);
             // Actualizar el nivel de prioridad del paciente
             strcpy(paciente_actual->prioridad, nueva_prioridad);
             printf("Prioridad actualizada con éxito.\n");
